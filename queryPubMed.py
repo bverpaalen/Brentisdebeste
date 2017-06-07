@@ -2,6 +2,7 @@ from Bio import Entrez
 from Bio import Medline
 
 def Main():
+    papers = []
     Entrez.email = "aditi.ch2@gmail.com"     # Always tell NCBI who you are
     handle = Entrez.esearch(db="pubmed", term="Anthocyanins", retmode='xml',retmax=100000)
     records = Entrez.read(handle)
@@ -9,8 +10,12 @@ def Main():
     handle.close()
     for number in range(0,10):
         hit = idsHit[number]
-        result = fetch_article(hit)
-        print(result)
+        results = fetch_article(hit)
+        for result in results:
+            papers.append(result)
+    for paper in papers:
+        author = paper["AU"]
+        print(author)
 
 def fetch_article(idToFetch):
     articles = []
