@@ -1,10 +1,10 @@
-import mysql.connector
+import mysql.connector as connector
 
 def main():
     db_connect()
 
 def db_connect():
-    database = MySQLdb.connect(host = "localhost",
+    database = connector.connect(host = "localhost",
                                user = "owe8_1617_grp12",
                                passwd = "blaat1234",
                                db = "cytosine.nl")
