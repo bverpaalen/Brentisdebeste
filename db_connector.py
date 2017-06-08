@@ -21,7 +21,7 @@ def infoCursor(cursor,connection):
     connection.close()
     return result
 
-def submitCursor(cursor,connection):
+def submitCursor(cur,con):
     con.commit()
     cur.close()
     con.close()
@@ -29,8 +29,8 @@ def submitCursor(cursor,connection):
 def SubmitSearchWord(searchWord):
     connection = createConnection()
     cursor = createCursor(connection)
-    cur.execute("INSERT INTO Search VALUES (NULL,%s)",searchWord)
-    submitCrusor(cursor,connection)
+    cursor.execute("INSERT INTO Search VALUES (NULL,%s)",searchWord)
+    submitCursor(cursor,connection)
 
 database = db_connect()
 SubmitSearchWord("test")
