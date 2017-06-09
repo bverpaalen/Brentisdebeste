@@ -1,4 +1,14 @@
-import mysql.connector as connector
+from flaskext.mysql import MySQL
+from flask import Flask
+
+app = Flask(__name__)
+
+mysql = MySQL()
+app.config['MYSQL_DATABASE_USER'] = 'owe8_1617_gr12'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'blaat1234'
+app.config['MYSQL_DATABASE_DB'] = 'owe8_1617_gr12_2'
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+mysql.init_app(app)
 
 def db_connect():
     database = connector.connect(host = "localhost",
@@ -8,7 +18,8 @@ def db_connect():
     return database
 
 def createConnection():
-    connection = database.connect()
+    #connection = database.connect()
+    connection = mysql.connect()	    
     return connection
 
 def createCursor(connection):
@@ -21,7 +32,7 @@ def infoCursor(cursor,connection):
     connection.close()
     return result
 
-def submitCursor(cursor,connection):
+def submitCursor(cur,con):
     con.commit()
     cur.close()
     con.close()
@@ -29,8 +40,7 @@ def submitCursor(cursor,connection):
 def SubmitSearchWord(searchWord):
     connection = createConnection()
     cursor = createCursor(connection)
-    cur.execute("INSERT INTO Search VALUES (NULL,%s)",searchWord)
-    submitCrusor(cursor,connection)
+    cursor.execute("INSERT INTO Search VALUES (NULL,%s)",searchWord)
+    submitCursor(cursor,connection)
 
-database = db_connect()
 SubmitSearchWord("test")
