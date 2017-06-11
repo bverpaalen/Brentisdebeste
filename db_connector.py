@@ -35,4 +35,25 @@ def SubmitSearchWord(searchWord):
     cursor.execute("INSERT INTO Search VALUES (NULL,%s)",searchWord)
     submitCursor(cursor,connection)
 
-SubmitSearchWord("test")
+def SubmitArticle(ListOfArticle):
+    connection = createConnection()
+    cursor = createCursor(connection)
+    #Input should be a tuple of article information gathered into a list
+    #[(information,etc.)(information,etc.)]
+    cursor.executemany("INSERT INTO Article(PubMed_ID,Article_link,Author,Date,Preview_summary,Search_Keywords_ID) VALUES (%s,%s,%s,%s,%s,%s)",ListOfArticle)
+    submitCursor(cursor,connection)
+
+def LinkArticelWithSearchWord(Links):
+    connection = createConnection()
+    cursor = createCursor(connection)
+    cursor.executemany("INSERT INTO //TABLE//(id,id)VALUES(%s,%s)",Links)
+    submitCursor(cursor,connection)
+
+def SearchWordId(searchword):
+    connection = createConnection()
+    cursor = createCursor(connection)
+    cursor.execute("SELECT Keywords_ID FROM SEARCH WHERE Keywords=%s",searchword)
+    for item in cursor:
+        print(item)
+
+print(SearchWordId("zoekwoordje"))
