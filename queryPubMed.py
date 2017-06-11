@@ -26,9 +26,11 @@ def RelatedPapers(querysAsDicInList):
         paperResults[englishQuery] = idsHit
     return paperResults
 
-def SubmitPapers(papers,query):
-    paperIds = ListToCsv(papers)
-    paper = FetchPaper(paperIds)
+def SubmitPapers(paperIds,query):
+    paperIdsCsv = ListToCsv(paperIds)
+    papers = FetchPaper(paperIds)
+    """for paper in papers:
+        print(PaperInformation(paper))"""
 
 def PaperInformation(paper):
     paperInformation = {}
@@ -49,22 +51,22 @@ def PaperInformation(paper):
     else:
         link = "missing"
     if 'DP' in paperKeys:
-        datum = paper['DP']
+        date = paper['DP']
     else:
-        datum = 'missing'
+        date = 'missing'
+    #Always missing?
     if 'ab' in paperKeys:
         summary = paper['AB']
     else:
         summary = 'missing'
-    paperInformation["Author"]
-    paperInformation["Url"]
-    paperInformation["PublicationDate"]
+    paperInformation["Author"] = author
+    paperInformation["Url"] = link
+    paperInformation["PublicationDate"] = date
     paperInformation["Summary"] = summary
     return paperInformation
 
 def FetchPaper(idToFetch):
     articles = []
-    print(idToFetch)
     handle = Entrez.efetch(db="pubmed", id=idToFetch, rettype="medline", retmode="json",retmax=100000)
     try:
         article = Medline.parse(handle)
