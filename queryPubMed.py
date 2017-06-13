@@ -3,6 +3,7 @@
 import sys
 from Bio import Entrez
 from Bio import Medline
+from db_connector import SubmitArticle,SearchWordId
 
 def Main(queryFilePath):
     papers = []
@@ -27,10 +28,22 @@ def RelatedPapers(querysAsDicInList):
     return paperResults
 
 def SubmitPapers(paperIds,query):
+    submitArticles = []
+    submitLinks = []
     paperIdsCsv = ListToCsv(paperIds)
     papers = FetchPaper(paperIds)
-    """for paper in papers:
-        print(PaperInformation(paper))"""
+    searchWordId = SearchWordId(query)
+    
+    for paper in papers:
+        information = PaperInformation(paper)
+        
+        paperToAdd = (information['PubMedId'],information['Url'],information['Author'],information['PublicationDate'],information['Summary'])
+        linkToAdd = (searchWordId,information['PubMedId'])
+        
+        submitArticles.append(paperToAdd)
+        submitLinks.append(linkToAdd)
+    SubmitArticle(submitArticles)
+    LinkArticelWithSearchWord(submitLinks)
 
 def PaperInformation(paper):
     paperInformation = {}
@@ -48,14 +61,16 @@ def PaperInformation(paper):
         author = "missing"
     if 'PMID' in paperKeys:
         link = 'https://www.ncbi.nlm.nih.gov/pubmed/?term='+paper['PMID']
+        pmid = paper['PMID']
     else:
         link = "missing"
+        pmid = "missing"
     if 'DP' in paperKeys:
         date = paper['DP']
     else:
         date = 'missing'
     #Always missing?
-    if 'ab' in paperKeys:
+    if 'AB' in paperKeys:
         summary = paper['AB']
     else:
         summary = 'missing'
@@ -63,6 +78,7 @@ def PaperInformation(paper):
     paperInformation["Url"] = link
     paperInformation["PublicationDate"] = date
     paperInformation["Summary"] = summary
+    paperInformation["PubMedId"] = pmid
     return paperInformation
 
 def FetchPaper(idToFetch):
